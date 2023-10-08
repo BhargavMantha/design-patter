@@ -1,6 +1,6 @@
 ## Start The application in Development Mode
 - Install the dependencies `npm install`
-- Start the application `npm run start:local`
+- Start the application `npm run start:dev`
 
 ## Start The application in Production Mode
 
