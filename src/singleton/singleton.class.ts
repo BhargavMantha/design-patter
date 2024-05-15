@@ -1,14 +1,20 @@
-export class Singleton {
-    private static instance: Singleton;
+export function Singleton<T extends { new (...args: any[]): object }>(constructor: T) {
+  return class extends constructor {
+    private static _instance: InstanceType<T>;
 
-    private constructor() {
-        // The constructor is private to prevent creating new instances of Singleton
+    constructor(...args: any[]) {
+      super(...args);
+      if ((constructor as any)._instance) {
+        return (constructor as any)._instance;
+      }
+      (constructor as any)._instance = this;
     }
 
-    public static getInstance(): Singleton {
-        if (!this.instance) {
-            this.instance = new Singleton();
-        }
-        return this.instance;
+    static getInstance(...args: any[]): InstanceType<T> {
+      if (!(constructor as any)._instance) {
+        (constructor as any)._instance = new this(...args);
+      }
+      return (constructor as any)._instance;
     }
+  } as T;
 }

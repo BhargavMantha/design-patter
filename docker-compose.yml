@@ -1,0 +1,50 @@
+version: '3.7'
+services:
+  mongodb_container:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+  dev:
+    container_name: workflow-executiondev
+    image: workflow-execution-dev:1.0.0
+    build:
+        context: .
+        target: development
+        dockerfile: ./Dockerfile
+    command: npm run start:debug
+    ports:
+        - 3000:3000
+        - 9229:9229
+    networks:
+        - api-network
+    volumes:
+        - .:/usr/src/app
+        - /usr/src/app/node_modules
+    restart: unless-stopped
+  prod:
+    container_name: workflow-execution_prod
+    image: workflow-execution-prod:1.0.0
+    build:
+        context: .
+        target: production
+        dockerfile: ./Dockerfile
+    command: npm run start:prod
+    ports:
+        - 3000:3000
+        - 9229:9229
+    networks:
+        - api-network
+    volumes:
+        - .:/usr/src/app
+        - /usr/src/app/node_modules
+    restart: unless-stopped
+volumes:
+  mongodb_data_container:
+
+networks:
+    api-network:

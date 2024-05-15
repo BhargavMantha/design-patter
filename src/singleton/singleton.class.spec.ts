@@ -1,13 +1,33 @@
-import { Singleton } from "./singleton.class"
+import { Singleton } from './singleton.class';
 
-describe('Singleton', () => {
-    describe('singleton', () => {
-        it('Should result in only one instance Initiation on multiple initiations', () => {
+@Singleton
+class DatabaseConnection {
+  connectionId: number;
 
-            const singleton1 = Singleton.getInstance();
-            const singleton2 = Singleton.getInstance();
-            expect(singleton1).toEqual(singleton2)
+  constructor() {
+    this.connectionId = Math.floor(Math.random() * 1000);
+  }
+}
 
-        });
-    });
+describe('Singleton Decorator', () => {
+  it('should create only one instance', () => {
+    const instance1 = (DatabaseConnection as any).getInstance();
+    const instance2 = (DatabaseConnection as any).getInstance();
+    expect(instance1).toBe(instance2);
+    expect(instance1).toBeInstanceOf(DatabaseConnection);
+    expect(instance2).toBeInstanceOf(DatabaseConnection);
+    expect(instance1.connectionId).toEqual(instance2.connectionId);
+  });
+
+  it('should maintain the same properties across instances', () => {
+    const instance1 = (DatabaseConnection as any).getInstance();
+    const instance2 = (DatabaseConnection as any).getInstance();
+    expect(instance1.connectionId).toBe(instance2.connectionId);
+  });
+
+  it('should prevent direct instantiation', () => {
+    const directInstance = new DatabaseConnection();
+    const singletonInstance = (DatabaseConnection as any).getInstance();
+    expect(directInstance).toBe(singletonInstance);
+  });
 });

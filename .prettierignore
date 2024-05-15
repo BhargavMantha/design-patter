@@ -1,6 +1,0 @@
-build
-dist
-coverage
-*.html
-.gitignore
-.prettierignore
