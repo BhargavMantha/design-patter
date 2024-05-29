@@ -20,9 +20,5 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowJs": true,
-    "paths": {
-      "@utils/*": ["src/utils/*"],
-      "@/*": ["src/*"]
-    }
   }
 }
